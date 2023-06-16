@@ -143,7 +143,8 @@ class _HomePageState extends State<HomePage> {
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("images/fondo.jpg"), // Ruta de la imagen de fondo
+            image: AssetImage(
+                "assets/images/fondo.jpg"), // Ruta de la imagen de fondo
             fit: BoxFit
                 .cover, // Ajusta la imagen para que cubra todo el contenedor
           ),
