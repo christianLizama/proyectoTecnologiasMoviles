@@ -47,7 +47,7 @@ class Boton extends StatelessWidget {
                           nombre,
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize: 20,
+                            fontSize: 18,
                             color: Colors.white,
                           ),
                         ),
