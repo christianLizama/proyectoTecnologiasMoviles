@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class Lugar {
   final String nombre;
@@ -25,8 +26,8 @@ class _LugaresCercanosState extends State<LugaresCercanos> {
   final TextEditingController _searchController = TextEditingController();
   List<Lugar> lugaresCercanos = [
     Lugar(
-      nombre: 'Lugar 1',
-      descripcion: 'Descripción del Lugar 1',
+      nombre: 'Plaza de armas',
+      descripcion: 'plaza qla',
       calificacion: 4.5,
     ),
     Lugar(
@@ -125,11 +126,18 @@ class _LugaresCercanosState extends State<LugaresCercanos> {
                 const SizedBox(height: 5),
                 Row(
                   children: [
-                    Icon(
-                      Icons.star,
-                      color: Colors.amber,
-                      size: 20,
+                    RatingBarIndicator(
+                      rating: lugar.calificacion,
+                      itemBuilder: (context, _) => const Icon(
+                        Icons.star,
+                        color: Colors.amber,
+                      ),
+                      itemCount: 5,
+                      itemSize: 20,
+                      unratedColor: Colors.grey[300],
+                      direction: Axis.horizontal,
                     ),
+                    const SizedBox(width: 5),
                     Text(
                       lugar.calificacion.toString(),
                       style: const TextStyle(fontSize: 14),
