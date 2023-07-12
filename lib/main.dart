@@ -12,7 +12,7 @@ void main() {
 class MyApp extends StatelessWidget {
   MyApp({super.key});
   final _routes = {
-    '/': (context) => const HomePage(),
+    '/': (context) => HomePage(),
     '/busquedaVoz': (context) => const BusquedaVoz(),
     '/lugaresCercanos': (context) => const LugaresCercanos(),
     '/escanearQR': (context) => const EscanearQr(),
