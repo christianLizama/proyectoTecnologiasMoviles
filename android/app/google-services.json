@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "897652991129",
+    "project_id": "dblugares",
+    "storage_bucket": "dblugares.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:897652991129:android:1e6f01448fe63e6fc38408",
+        "android_client_info": {
+          "package_name": "com.example.lugares_cercanos"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "897652991129-m615oa7lj7dmgu5sq8c125lh81dub0l0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDQ_wECg2XwmkAHTvYuknECuAVgjR5Jt3w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "897652991129-m615oa7lj7dmgu5sq8c125lh81dub0l0.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "897652991129-bi3l9ejia2k2l30i9v0mibec9git1iej.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.lugaresCercanos.RunnerTests"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
