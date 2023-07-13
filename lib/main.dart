@@ -3,17 +3,17 @@ import 'package:lugares_cercanos/pages/busqueda_voz.dart';
 import 'pages/home_page.dart';
 import 'pages/page_404.dart';
 import 'pages/lugares_cercanos.dart';
+import 'pages/mapa.dart';
 import 'pages/escanear_qr.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
-void main()async {
+void main() async {
   runApp(MyApp());
   await Firebase.initializeApp(
-  options: DefaultFirebaseOptions.currentPlatform,
-);
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 }
-
 
 class MyApp extends StatelessWidget {
   MyApp({super.key});
@@ -22,6 +22,7 @@ class MyApp extends StatelessWidget {
     '/busquedaVoz': (context) => const BusquedaVoz(),
     '/lugaresCercanos': (context) => const LugaresCercanos(),
     '/escanearQR': (context) => const EscanearQr(),
+    '/verMapa': (context) => const MapSample(),
   };
 
   @override
