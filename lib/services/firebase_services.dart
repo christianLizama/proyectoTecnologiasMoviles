@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../pages/lugares_cercanos.dart';
+import '../util/lugar.dart';
 
 FirebaseFirestore db = FirebaseFirestore.instance;
 
@@ -16,7 +16,7 @@ Future<List<Lugar>> getLugaresFromFirebase() async {
     List valoraciones = doc['valoraciones'];
     Map ubicacion = doc['ubicacion'];
 
-    print(doc['nombre']);
+    print(doc['ubicacion']);
 
     Lugar lugar = Lugar(
       nombre: nombre,

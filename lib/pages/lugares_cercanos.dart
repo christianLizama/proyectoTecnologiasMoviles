@@ -1,24 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import '../services/firebase_services.dart';
-
-class Lugar {
-  final String nombre;
-  final String historia;
-  double valoracion;
-  List valoraciones;
-  Map ubicacion;
-  bool marcado;
-
-  Lugar({
-    required this.nombre,
-    required this.historia,
-    required this.valoracion,
-    required this.valoraciones,
-    required this.ubicacion,
-    this.marcado = false,
-  });
-}
+import '../util/lugar.dart';
 
 class LugaresCercanos extends StatefulWidget {
   const LugaresCercanos({Key? key}) : super(key: key);
@@ -30,7 +13,6 @@ class LugaresCercanos extends StatefulWidget {
 class _LugaresCercanosState extends State<LugaresCercanos> {
   final TextEditingController _searchController = TextEditingController();
   List<Lugar> lugaresCercanos = [];
-
   List<Lugar> filteredLugares = [];
 
   @override
