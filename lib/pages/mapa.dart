@@ -26,11 +26,6 @@ class MapSampleState extends State<MapSample> {
     });
   }
 
-  static const CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(-34.97855654890672, -71.2500186981804),
-    zoom: 14.4746,
-  );
-
   @override
   void initState() {
     getCurrentLocation();
@@ -49,8 +44,10 @@ class MapSampleState extends State<MapSample> {
               myLocationEnabled: true,
               myLocationButtonEnabled: true,
               initialCameraPosition: CameraPosition(
-                  target: LatLng(
-                      currentLocation!.latitude!, currentLocation!.longitude!)),
+                target: LatLng(
+                    currentLocation!.latitude!, currentLocation!.longitude!),
+                zoom: 18,
+              ),
               onMapCreated: (GoogleMapController controller) {
                 _controller.complete(controller);
               },
