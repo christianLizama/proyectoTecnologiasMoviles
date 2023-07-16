@@ -4,7 +4,8 @@ import '../services/firebase_services.dart';
 import '../util/lugar.dart';
 
 class LugaresCercanos extends StatefulWidget {
-  const LugaresCercanos({Key? key}) : super(key: key);
+  final String searchText;
+  const LugaresCercanos({Key? key, required this.searchText}) : super(key: key);
 
   @override
   State<LugaresCercanos> createState() => _LugaresCercanosState();
@@ -25,8 +26,10 @@ class _LugaresCercanosState extends State<LugaresCercanos> {
       setState(() {
         lugaresCercanos = lugares;
         filteredLugares.addAll(lugaresCercanos);
+        filterLugares(widget.searchText); // Filtrar los lugares inicialmente
       });
     });
+    _searchController.text = widget.searchText; // Establecer el texto de búsqueda inicial
   }
 
   void filterLugares(String searchText) {

@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
   final _routes = {
     '/': (context) => const HomePage(),
     '/busquedaVoz': (context) => const BusquedaVoz(),
-    '/lugaresCercanos': (context) => const LugaresCercanos(),
+    '/lugaresCercanos': (context) => const LugaresCercanos(searchText: '',),
     '/escanearQR': (context) => const EscanearQr(),
     '/verMapa': (context) => const MapSample(),
   };
