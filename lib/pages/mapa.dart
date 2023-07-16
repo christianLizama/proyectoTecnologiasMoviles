@@ -65,20 +65,21 @@ class MapSampleState extends State<MapSample> {
 
     getLugaresFromFirebase().then((lugares) {
       setState(() {
-        //lugaresCercanos = lugares;
+        lugaresCercanos = lugares;
+        lugaresCercanos[0].printValues();
         //Ejemplo con coordenadas puestas en plaza de los heroes, dsps borrar
-        Map<String, double> ubi = {
-          'latitud': -34.170311,
-          'longitud': -70.740843,
-        };
-        Lugar lugarEjemplo = Lugar(
-            nombre: "Plaza de los Heroes",
-            historia:
-                "La Plaza de los Héroes de Rancagua es la plaza más importante de esta ciudad",
-            valoracion: 3,
-            valoraciones: [],
-            ubicacion: ubi);
-        lugaresCercanos.add(lugarEjemplo);
+        // Map<String, double> ubi = {
+        //   'latitud': -34.170311,
+        //   'longitud': -70.740843,
+        // };
+        // Lugar lugarEjemplo = Lugar(
+        //     nombre: "Plaza de los Heroes",
+        //     historia:
+        //         "La Plaza de los Héroes de Rancagua es la plaza más importante de esta ciudad",
+        //     valoracion: 3,
+        //     valoraciones: [],
+        //     ubicacion: ubi);
+        // lugaresCercanos.add(lugarEjemplo);
       });
     });
 

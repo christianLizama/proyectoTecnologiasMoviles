@@ -16,8 +16,6 @@ Future<List<Lugar>> getLugaresFromFirebase() async {
     List valoraciones = doc['valoraciones'];
     Map ubicacion = doc['ubicacion'];
 
-    print(doc['ubicacion']);
-
     Lugar lugar = Lugar(
       nombre: nombre,
       historia: historia,
