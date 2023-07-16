@@ -3,8 +3,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
-import '../util/lugar.dart';
+
 import '../services/firebase_services.dart';
+import '../util/lugar.dart';
 
 class MapSample extends StatefulWidget {
   const MapSample({Key? key}) : super(key: key);
@@ -19,20 +20,46 @@ class MapSampleState extends State<MapSample> {
   LocationData? currentLocation;
   List<Lugar> lugaresCercanos = [];
 
-  void getCurrentLocation() {
-    Location location = Location();
+  Location location = Location();
+  bool locationEnabled = false;
 
-    location.onLocationChanged.listen((LocationData currentLocation) {
-      setState(() {
-        this.currentLocation = currentLocation;
-      });
+  Future<void> getCurrentLocation() async {
+    bool serviceEnabled;
+    PermissionStatus permissionGranted;
+
+    // Verificar si el servicio de ubicación está habilitado
+    serviceEnabled = await location.serviceEnabled();
+    if (!serviceEnabled) {
+      // Solicitar al usuario que encienda la ubicación
+      serviceEnabled = await location.requestService();
+      if (!serviceEnabled) {
+        // El usuario no encendió la ubicación, puedes mostrar un mensaje o tomar otra acción aquí.
+        return;
+      }
+    }
+
+    // Verificar si se concedió el permiso de ubicación
+    permissionGranted = await location.hasPermission();
+    if (permissionGranted == PermissionStatus.denied) {
+      // Solicitar al usuario el permiso de ubicación
+      permissionGranted = await location.requestPermission();
+      if (permissionGranted != PermissionStatus.granted) {
+        // El usuario no otorgó el permiso de ubicación, puedes mostrar un mensaje o tomar otra acción aquí.
+        return;
+      }
+    }
+
+    // Obtener la ubicación actual
+    LocationData? currentLocation = await location.getLocation();
+    setState(() {
+      this.currentLocation = currentLocation;
+      locationEnabled = true;
     });
   }
 
   @override
   void initState() {
     super.initState();
-    getCurrentLocation();
 
     lugaresCercanos = []; // Inicializar la lista vacía
 
@@ -54,6 +81,8 @@ class MapSampleState extends State<MapSample> {
         lugaresCercanos.add(lugarEjemplo);
       });
     });
+
+    getCurrentLocation();
   }
 
   Set<Marker> _getMarkers() {
@@ -72,11 +101,8 @@ class MapSampleState extends State<MapSample> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: currentLocation == null
-          ? const Center(
-              child: Text("Loading"),
-            )
-          : GoogleMap(
+      body: locationEnabled
+          ? GoogleMap(
               mapType: MapType.normal,
               myLocationEnabled: true,
               myLocationButtonEnabled: true,
@@ -91,6 +117,19 @@ class MapSampleState extends State<MapSample> {
                 _controller.complete(controller);
               },
               markers: _getMarkers(),
+            )
+          : Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text(
+                  "No se puede acceder a tu ubicación actual.",
+                  style: TextStyle(fontSize: 16),
+                ),
+                ElevatedButton(
+                  onPressed: getCurrentLocation,
+                  child: const Text('Reintentar'),
+                ),
+              ],
             ),
     );
   }
