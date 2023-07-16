@@ -14,4 +14,13 @@ class Lugar {
     required this.ubicacion,
     this.marcado = false,
   });
+
+  void printValues() {
+    print('Nombre: $nombre');
+    print('Historia: $historia');
+    print('Valoración: $valoracion');
+    print('Valoraciones: $valoraciones');
+    print('Ubicación: $ubicacion');
+    print('Marcado: $marcado');
+  }
 }
