@@ -93,40 +93,88 @@ class MapSampleState extends State<MapSample> {
     }).toSet();
   }
 
+  void _currentLocation() async {
+    final GoogleMapController controller = await _controller.future;
+    var location2 = new Location();
+    try {
+      currentLocation = await location2.getLocation();
+    } on Exception {
+      currentLocation = null;
+    }
+
+    controller.animateCamera(CameraUpdate.newCameraPosition(
+      CameraPosition(
+        bearing: 0,
+        target: LatLng(
+          currentLocation!.latitude!,
+          currentLocation!.longitude!,
+        ),
+        zoom: 18.0,
+      ),
+    ));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: locationEnabled
-          ? GoogleMap(
-              mapType: MapType.normal,
-              myLocationEnabled: true,
-              myLocationButtonEnabled: true,
-              initialCameraPosition: CameraPosition(
-                target: LatLng(
-                  currentLocation!.latitude!,
-                  currentLocation!.longitude!,
-                ),
-                zoom: 18,
-              ),
-              onMapCreated: (GoogleMapController controller) {
-                controller.setMapStyle(mapStyle);
-                _controller.complete(controller);
-              },
-              markers: _getMarkers(),
-            )
-          : Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text(
-                  "No se puede acceder a tu ubicación actual.",
-                  style: TextStyle(fontSize: 16),
-                ),
-                ElevatedButton(
-                  onPressed: getCurrentLocation,
-                  child: const Text('Reintentar'),
-                ),
-              ],
-            ),
-    );
+        body: locationEnabled
+            ? Stack(
+                children: [
+                  GoogleMap(
+                    mapType: MapType.normal,
+                    myLocationEnabled: true,
+                    myLocationButtonEnabled: false,
+                    initialCameraPosition: CameraPosition(
+                      target: LatLng(
+                        currentLocation!.latitude!,
+                        currentLocation!.longitude!,
+                      ),
+                      zoom: 18,
+                    ),
+                    onMapCreated: (GoogleMapController controller) {
+                      controller.setMapStyle(mapStyle);
+                      _controller.complete(controller);
+                    },
+                    markers: _getMarkers(),
+                  ),
+                  Positioned(
+                    //left: 16,
+                    right: 7,
+                    bottom: 100,
+                    child: FloatingActionButton(
+                      onPressed: _currentLocation,
+                      mini: true,
+                      backgroundColor: Colors.amber[700],
+                      child: const Icon(Icons.location_on),
+                    ),
+                  ),
+                ],
+              )
+            : Container(
+                color: Colors
+                    .white, // Color de fondo del contenedor, ajusta según tus necesidades
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        "No se puede acceder a tu ubicación actual.",
+                        style: TextStyle(fontSize: 17),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(
+                        height: 16,
+                      ), // Espacio adicional entre el texto y el botón
+                      ElevatedButton(
+                        onPressed: getCurrentLocation,
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                              Colors.amber[700]!),
+                        ),
+                        child: const Text('Reintentar'),
+                      ),
+                    ],
+                  ),
+                )));
   }
 }
