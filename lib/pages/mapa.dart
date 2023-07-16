@@ -15,6 +15,7 @@ class MapSample extends StatefulWidget {
 }
 
 class MapSampleState extends State<MapSample> {
+  String mapStyle = '';
   final Completer<GoogleMapController> _controller =
       Completer<GoogleMapController>();
   LocationData? currentLocation;
@@ -67,23 +68,16 @@ class MapSampleState extends State<MapSample> {
       setState(() {
         lugaresCercanos = lugares;
         lugaresCercanos[0].printValues();
-        //Ejemplo con coordenadas puestas en plaza de los heroes, dsps borrar
-        // Map<String, double> ubi = {
-        //   'latitud': -34.170311,
-        //   'longitud': -70.740843,
-        // };
-        // Lugar lugarEjemplo = Lugar(
-        //     nombre: "Plaza de los Heroes",
-        //     historia:
-        //         "La Plaza de los Héroes de Rancagua es la plaza más importante de esta ciudad",
-        //     valoracion: 3,
-        //     valoraciones: [],
-        //     ubicacion: ubi);
-        // lugaresCercanos.add(lugarEjemplo);
       });
     });
 
     getCurrentLocation();
+
+    DefaultAssetBundle.of(context)
+        .loadString('assets/map/map_style.json')
+        .then((value) {
+      mapStyle = value;
+    });
   }
 
   Set<Marker> _getMarkers() {
@@ -115,6 +109,7 @@ class MapSampleState extends State<MapSample> {
                 zoom: 18,
               ),
               onMapCreated: (GoogleMapController controller) {
+                controller.setMapStyle(mapStyle);
                 _controller.complete(controller);
               },
               markers: _getMarkers(),
