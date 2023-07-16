@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import '../services/firebase_services.dart';
 import '../util/lugar.dart';
+import 'vista_lugar.dart';
 
 class LugaresCercanos extends StatefulWidget {
   final String searchText;
@@ -19,8 +20,7 @@ class _LugaresCercanosState extends State<LugaresCercanos> {
   @override
   void initState() {
     super.initState();
-    lugaresCercanos =
-        List<Lugar>.empty(growable: true); // Inicializar la lista vacía
+    lugaresCercanos = List<Lugar>.empty(growable: true);
 
     getLugaresFromFirebase().then((lugares) {
       setState(() {
@@ -47,6 +47,15 @@ class _LugaresCercanosState extends State<LugaresCercanos> {
     setState(() {
       lugaresCercanos[index].marcado = !lugaresCercanos[index].marcado;
     });
+  }
+
+  void navigateToLugarDetalle(Lugar lugar) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => LugarDetalle(lugar: lugar),
+      ),
+    );
   }
 
   @override
@@ -83,15 +92,13 @@ class _LugaresCercanosState extends State<LugaresCercanos> {
         ],
       ),
       body: Padding(
-        padding:
-            const EdgeInsets.only(top: 30.0), // Establecer un espacio superior
+        padding: const EdgeInsets.only(top: 30.0),
         child: ListView.builder(
           itemCount: filteredLugares.length,
           itemBuilder: (BuildContext context, int index) {
             final lugar = filteredLugares[index];
             return ListTile(
-              leading: const Icon(
-                  Icons.location_on), // Icono a la izquierda del título
+              leading: const Icon(Icons.location_on),
               title: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -139,7 +146,9 @@ class _LugaresCercanosState extends State<LugaresCercanos> {
                   toggleMarcado(index);
                 },
               ),
-              // Agrega cualquier otro widget adicional para mostrar información sobre el lugar
+              onTap: () {
+                navigateToLugarDetalle(lugar); // Navegar a la vista de detalles del lugar
+              },
             );
           },
         ),
@@ -153,3 +162,4 @@ class _LugaresCercanosState extends State<LugaresCercanos> {
     super.dispose();
   }
 }
+
