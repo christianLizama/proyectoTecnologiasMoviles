@@ -131,8 +131,10 @@ class MapSampleState extends State<MapSample> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        extendBodyBehindAppBar: true,
         appBar: AppBar(
-          backgroundColor: Colors.amber[700],
+          backgroundColor: Colors.transparent,
+          shadowColor: const Color.fromARGB(110, 0, 0, 0),
           title: const Text("Mapa"),
         ),
         body: locationEnabled
