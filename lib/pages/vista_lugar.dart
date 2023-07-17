@@ -40,6 +40,22 @@ class _LugarDetalleState extends State<LugarDetalle> {
     final double carouselWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.amber[700],
+        actions: [
+          IconButton(
+            icon: Icon(
+              isFavorite ? Icons.favorite : Icons.favorite_border,
+              color: Colors.red,
+            ),
+            onPressed: () {
+              setState(() {
+                isFavorite = !isFavorite;
+              });
+            },
+          ),
+        ],
+      ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -62,32 +78,14 @@ class _LugarDetalleState extends State<LugarDetalle> {
                         fit: BoxFit.cover,
                         width: carouselWidth,
                       ),
-                      Positioned(
-                        top: 25,
-                        child: IconButton(
-                          iconSize: 40,
-                          icon: const Icon(Icons.arrow_back),
-                          color: Colors.black,
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                        ),
-                      ),
-                      Positioned(
-                        top: 25,
-                        right: 10,
-                        child: IconButton(
-                          iconSize: 40,
-                          icon: Icon(
-                            isFavorite ? Icons.favorite : Icons.favorite_border,
-                            color: Colors.red,
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              isFavorite = !isFavorite;
-                            });
-                          },
-                        ),
+                    ],
+                  ),
+                  Stack(
+                    children: [
+                      Image.network(
+                        'https://www.monumentos.gob.cl/sites/default/files/styles/slide_monumentos/public/image-monumentos/ZT_00425_2011_CMN%20%282%29.JPG?itok=S89AiYuD',
+                        fit: BoxFit.cover,
+                        width: carouselWidth,
                       ),
                     ],
                   ),
@@ -96,47 +94,48 @@ class _LugarDetalleState extends State<LugarDetalle> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Align(
-                alignment: Alignment.center,
-                child: Text(
-                  widget.lugar.nombre,
-                  style: const TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
+              child: Column(
+                children: [
+                  Text(
+                    widget.lugar.nombre,
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
-            Center(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    RatingBarIndicator(
-                      rating: widget.lugar.valoracion,
-                      itemBuilder: (context, _) => const Icon(
-                        Icons.star,
-                        color: Colors.amber,
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          RatingBarIndicator(
+                            rating: widget.lugar.valoracion,
+                            itemBuilder: (context, _) => const Icon(
+                              Icons.star,
+                              color: Colors.amber,
+                            ),
+                            itemCount: 5,
+                            itemSize: 20,
+                            unratedColor: Colors.grey[300],
+                            direction: Axis.horizontal,
+                          ),
+                          const SizedBox(width: 5),
+                          Text(
+                            widget.lugar.valoracion.toString(),
+                            style: const TextStyle(fontSize: 14),
+                          ),
+                          const SizedBox(width: 5),
+                          Text(
+                            '(${widget.lugar.valoraciones.length})',
+                            style: const TextStyle(fontSize: 14),
+                          ),
+                        ],
                       ),
-                      itemCount: 5,
-                      itemSize: 20,
-                      unratedColor: Colors.grey[300],
-                      direction: Axis.horizontal,
                     ),
-                    const SizedBox(width: 5),
-                    Text(
-                      widget.lugar.valoracion.toString(),
-                      style: const TextStyle(fontSize: 14),
-                    ),
-                    const SizedBox(width: 5),
-                    Text(
-                      '(${widget.lugar.valoraciones.length})',
-                      style: const TextStyle(fontSize: 14),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
             const SizedBox(height: 10),
