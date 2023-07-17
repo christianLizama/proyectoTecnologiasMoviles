@@ -29,7 +29,8 @@ class _LugaresCercanosState extends State<LugaresCercanos> {
         filterLugares(widget.searchText); // Filtrar los lugares inicialmente
       });
     });
-    _searchController.text = widget.searchText; // Establecer el texto de búsqueda inicial
+    _searchController.text =
+        widget.searchText; // Establecer el texto de búsqueda inicial
   }
 
   void filterLugares(String searchText) {
@@ -126,6 +127,11 @@ class _LugaresCercanosState extends State<LugaresCercanos> {
                         lugar.valoracion.toString(),
                         style: const TextStyle(fontSize: 14),
                       ),
+                      const SizedBox(width: 5),
+                      Text(
+                        '(${lugar.valoraciones.length})',
+                        style: const TextStyle(fontSize: 14),
+                      ),
                     ],
                   ),
                   const SizedBox(height: 5),
@@ -147,7 +153,8 @@ class _LugaresCercanosState extends State<LugaresCercanos> {
                 },
               ),
               onTap: () {
-                navigateToLugarDetalle(lugar); // Navegar a la vista de detalles del lugar
+                navigateToLugarDetalle(
+                    lugar); // Navegar a la vista de detalles del lugar
               },
             );
           },
@@ -162,4 +169,3 @@ class _LugaresCercanosState extends State<LugaresCercanos> {
     super.dispose();
   }
 }
-

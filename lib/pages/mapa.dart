@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'package:lugares_cercanos/pages/vista_lugar.dart';
 
 import '../services/firebase_services.dart';
 import '../util/lugar.dart';
@@ -88,6 +89,10 @@ class MapSampleState extends State<MapSample> {
             LatLng(lugar.ubicacion['latitud'], lugar.ubicacion['longitud']),
         infoWindow: InfoWindow(
           title: lugar.nombre,
+          onTap: () {
+            navigateToLugarDetalle(
+                lugar); // Navegar a la vista de detalles del lugar
+          },
         ),
       );
     }).toSet();
@@ -114,9 +119,22 @@ class MapSampleState extends State<MapSample> {
     ));
   }
 
+  void navigateToLugarDetalle(Lugar lugar) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => LugarDetalle(lugar: lugar),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.amber[700],
+          title: const Text("Mapa"),
+        ),
         body: locationEnabled
             ? Stack(
                 children: [
