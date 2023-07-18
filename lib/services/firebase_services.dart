@@ -29,3 +29,32 @@ Future<List<Lugar>> getLugaresFromFirebase() async {
 
   return lugares;
 }
+
+Future<Lugar?> getLugarByNameFromFirebase(String nombreLugar) async {
+  QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+      .collection('lugares')
+      .where('nombre', isEqualTo: nombreLugar)
+      .limit(1)
+      .get();
+
+  if (querySnapshot.docs.isNotEmpty) {
+    var doc = querySnapshot.docs.first;
+
+    String nombre = doc['nombre'];
+    String historia = doc['historia'];
+    double valoracion = doc['valoracion'].toDouble();
+    List valoraciones = doc['valoraciones'];
+    Map ubicacion = doc['ubicacion'];
+
+    Lugar lugar = Lugar(
+      nombre: nombre,
+      historia: historia,
+      valoracion: valoracion,
+      valoraciones: valoraciones,
+      ubicacion: ubicacion,
+    );
+
+    return lugar;
+  }
+  return null;
+}

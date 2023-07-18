@@ -82,13 +82,11 @@ class _LugarDetalleState extends State<LugarDetalle> {
                 shape: BoxShape.rectangle,
                 color: Color.fromRGBO(255, 160, 0, 1),
                 borderRadius: BorderRadius.all(Radius.circular(10)),
-                
               ),
               child: Center(
                 child: Icon(
                   isFavorite ? Icons.favorite : Icons.favorite_border,
                   color: Colors.white,
-                  
                 ),
               ),
             ),
