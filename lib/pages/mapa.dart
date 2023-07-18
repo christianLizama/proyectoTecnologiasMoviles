@@ -100,7 +100,7 @@ class MapSampleState extends State<MapSample> {
 
   void _currentLocation() async {
     final GoogleMapController controller = await _controller.future;
-    var location2 = new Location();
+    var location2 = Location();
     try {
       currentLocation = await location2.getLocation();
     } on Exception {

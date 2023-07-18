@@ -10,7 +10,7 @@ class LugarDetalle extends StatefulWidget {
   const LugarDetalle({Key? key, required this.lugar}) : super(key: key);
 
   @override
-  _LugarDetalleState createState() => _LugarDetalleState();
+  State<LugarDetalle> createState() => _LugarDetalleState();
 }
 
 class _LugarDetalleState extends State<LugarDetalle> {
