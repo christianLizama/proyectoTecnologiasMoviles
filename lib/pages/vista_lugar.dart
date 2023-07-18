@@ -10,7 +10,7 @@ class LugarDetalle extends StatefulWidget {
   const LugarDetalle({Key? key, required this.lugar}) : super(key: key);
 
   @override
-  _LugarDetalleState createState() => _LugarDetalleState();
+  State<LugarDetalle> createState() => _LugarDetalleState();
 }
 
 class _LugarDetalleState extends State<LugarDetalle> {
@@ -40,19 +40,56 @@ class _LugarDetalleState extends State<LugarDetalle> {
     final double carouselWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
-        backgroundColor: Colors.amber[700],
-        actions: [
-          IconButton(
-            icon: Icon(
-              isFavorite ? Icons.favorite : Icons.favorite_border,
-              color: Colors.red,
+        backgroundColor: Colors.transparent,
+        shadowColor: Colors.transparent,
+        leading: GestureDetector(
+          child: SizedBox(
+            child: Transform.scale(
+              scale:
+                  0.75, // Ajusta este valor para cambiar el tamaño del contenedor
+              child: Container(
+                decoration: const BoxDecoration(
+                    shape: BoxShape.rectangle,
+                    color: Color.fromRGBO(255, 160, 0, 1),
+                    borderRadius: BorderRadius.all(Radius.circular(20))),
+                child: const Center(
+                  child: Icon(
+                    Icons.arrow_back,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
             ),
-            onPressed: () {
+          ),
+          onTap: () {
+            Navigator.pop(context);
+          },
+        ),
+        actions: [
+          GestureDetector(
+            onTap: () {
               setState(() {
                 isFavorite = !isFavorite;
               });
             },
+            child: Container(
+              margin: const EdgeInsets.all(8),
+              width: 40,
+              height: 50,
+              decoration: const BoxDecoration(
+                shape: BoxShape.rectangle,
+                color: Color.fromRGBO(255, 160, 0, 1),
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+              ),
+              child: Center(
+                child: Icon(
+                  isFavorite ? Icons.favorite : Icons.favorite_border,
+                  color: Colors.white,
+                ),
+              ),
+            ),
           ),
         ],
       ),
@@ -60,7 +97,7 @@ class _LugarDetalleState extends State<LugarDetalle> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
+            SizedBox(
               height: carouselHeight,
               width: carouselWidth,
               child: CarouselSlider(

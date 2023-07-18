@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lugares_cercanos/pages/busqueda_voz.dart';
+import 'package:lugares_cercanos/pages/register.dart';
 import 'pages/home_page.dart';
 import 'pages/page_404.dart';
 import 'pages/lugares_cercanos.dart';
@@ -7,18 +8,25 @@ import 'pages/mapa.dart';
 import 'pages/escanear_qr.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'pages/login.dart';
+import 'pages/login_init.dart';
 
 void main() async {
-  runApp(MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  runApp(MyApp());
+  
 }
 
 class MyApp extends StatelessWidget {
   MyApp({super.key});
   final _routes = {
-    '/': (context) => const HomePage(),
+    '/': (context) => const WelcomePage(),
+    '/login': (context) => const LoginPage(),
+    '/register': (context) => const RegisterPage(),
+    '/home':(context) => const HomePage(),
     '/busquedaVoz': (context) => const BusquedaVoz(),
     '/lugaresCercanos': (context) => const LugaresCercanos(searchText: '',),
     '/escanearQR': (context) => const EscanearQr(),
