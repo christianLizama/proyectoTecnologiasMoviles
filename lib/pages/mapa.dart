@@ -101,7 +101,7 @@ class MapSampleState extends State<MapSample> {
 
   void _currentLocation() async {
     final GoogleMapController controller = await _controller.future;
-    var location2 = new Location();
+    var location2 = Location();
     try {
       currentLocation = await location2.getLocation();
     } on Exception {
@@ -132,8 +132,10 @@ class MapSampleState extends State<MapSample> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        extendBodyBehindAppBar: true,
         appBar: AppBar(
-          backgroundColor: Colors.amber[700],
+          backgroundColor: Colors.transparent,
+          shadowColor: const Color.fromARGB(110, 0, 0, 0),
           title: const Text("Mapa"),
         ),
         body: locationEnabled

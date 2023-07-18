@@ -9,7 +9,7 @@ Future<List<Lugar>> getLugaresFromFirebase() async {
   QuerySnapshot querySnapshot =
       await FirebaseFirestore.instance.collection('lugares').get();
 
-  querySnapshot.docs.forEach((doc) {
+  for (var doc in querySnapshot.docs) {
     String nombre = doc['nombre'];
     String historia = doc['historia'];
     double valoracion = doc['valoracion'].toDouble();
@@ -25,7 +25,7 @@ Future<List<Lugar>> getLugaresFromFirebase() async {
     );
 
     lugares.add(lugar);
-  });
+  }
 
   return lugares;
 }

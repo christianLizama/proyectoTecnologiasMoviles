@@ -26,9 +26,9 @@ class Boton extends StatelessWidget {
             borderRadius: BorderRadius.circular(24),
             boxShadow: [
               BoxShadow(
-                color: Color.fromARGB(255, 0, 0, 0).withOpacity(0.3),
+                color: const Color.fromARGB(255, 0, 0, 0).withOpacity(0.3),
                 blurRadius: 5,
-                offset: Offset(0, 3),
+                offset: const Offset(0, 3),
               ),
             ],
           ),

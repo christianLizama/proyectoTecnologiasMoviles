@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
-
+import 'package:lugares_cercanos/services/auth.dart';
 import '../util/boton.dart';
-
-final GlobalKey<ScaffoldState> _key = GlobalKey(); // Create a key
+import 'package:firebase_auth/firebase_auth.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  // padding constants
+  // Padding constants
   final double horizontalPadding = 40;
   final double verticalPadding = 25;
 
@@ -25,6 +24,9 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    // Obtener información del usuario actualmente autenticado
+    User? user = FirebaseAuth.instance.currentUser;
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -35,8 +37,7 @@ class _HomePageState extends State<HomePage> {
           Builder(
             builder: (BuildContext context) {
               return IconButton(
-                icon: Image.asset(
-                    'lib/icons/menu.png'), // Reemplaza la ruta con la ubicación de tu imagen
+                icon: Image.asset('lib/icons/menu.png'),
                 iconSize: 35,
                 onPressed: () {
                   Scaffold.of(context).openEndDrawer();
@@ -48,28 +49,25 @@ class _HomePageState extends State<HomePage> {
       ),
       endDrawer: Theme(
         data: Theme.of(context).copyWith(
-          // Establece la transparencia aquí
-          canvasColor: Colors
-              .transparent, // o cualquier otro color que desees, por ejemplo, Colors.blue.withOpacity(0.5)
+          canvasColor: Colors.transparent,
         ),
         child: Drawer(
           child: Container(
             decoration: const BoxDecoration(
-              color: Color.fromARGB(150, 255, 255,
-                  255), // Establece el color de fondo como transparente
+              color: Color.fromARGB(150, 255, 255, 255),
             ),
             child: ListView(
               padding: EdgeInsets.symmetric(
                   vertical: MediaQuery.of(context).size.height * 0.05),
               children: <Widget>[
                 ListTile(
-                  title: const Center(
+                  title: Center(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.person), // Icono de usuario
-                        SizedBox(width: 5), // Espacio entre el icono y el texto
-                        Text('Nombre de usuario'),
+                        const Icon(Icons.person),
+                        const SizedBox(width: 5),
+                        Text(user?.displayName ?? 'Nombre de usuario'), // Mostrar el nombre del usuario actualmente autenticado
                       ],
                     ),
                   ),
@@ -77,7 +75,6 @@ class _HomePageState extends State<HomePage> {
                     // Agrega el código para la opción
                   },
                 ),
-                //agregar linea de separacion
                 const Divider(
                   color: Color.fromARGB(150, 255, 255, 255),
                   height: 20,
@@ -122,18 +119,17 @@ class _HomePageState extends State<HomePage> {
                 ElevatedButton.icon(
                   onPressed: () {
                     // Agrega el código para cerrar la sesión aquí
+                    AuthServices.signOut(context);
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue, // Color de fondo celeste
-                    //borde al boton
+                    backgroundColor: Colors.blue,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20),
                     ),
-                    //ancho del boton
                     minimumSize: const Size(10, 50),
                   ),
-                  icon: Icon(Icons.logout), // Icono de salir/cerrar sesión
-                  label: Text('Cerrar sesión'),
+                  icon: const Icon(Icons.logout),
+                  label: const Text('Cerrar sesión'),
                 ),
               ],
             ),
