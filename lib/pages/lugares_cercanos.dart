@@ -73,9 +73,8 @@ class _LugaresCercanosState extends State<LugaresCercanos> {
     }
   }
 
-  void toggleMarcado(int index) async {
-    final lugar = lugaresCercanos[index];
-    final lugarId = lugar.id;
+  void toggleMarcado(String lugarId) async {
+    final lugar = lugaresCercanos.firstWhere((lugar) => lugar.id == lugarId);
     final lugarNombre = lugar.nombre;
 
     String? userId = await getUserId();
@@ -100,7 +99,7 @@ class _LugaresCercanosState extends State<LugaresCercanos> {
           });
         }
         setState(() {
-          lugaresCercanos[index].marcado = !lugaresCercanos[index].marcado;
+          lugar.marcado = !lugar.marcado;
         });
       } catch (e) {
         print('Error al actualizar la lista de favoritos: $e');
