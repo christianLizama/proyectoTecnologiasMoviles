@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
@@ -7,6 +8,8 @@ import 'package:lugares_cercanos/pages/vista_lugar.dart';
 
 import '../services/firebase_services.dart';
 import '../util/lugar.dart';
+import '../util/end_drawer.dart'; // Importa el componente EndDrawer
+import '../services/auth.dart'; // Importa el servicio de autenticación
 
 class MapSample extends StatefulWidget {
   const MapSample({Key? key}) : super(key: key);
@@ -132,70 +135,94 @@ class MapSampleState extends State<MapSample> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        extendBodyBehindAppBar: true,
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          shadowColor: const Color.fromARGB(110, 0, 0, 0),
-          title: const Text("Mapa"),
-        ),
-        body: locationEnabled
-            ? Stack(
-                children: [
-                  GoogleMap(
-                    mapType: MapType.normal,
-                    myLocationEnabled: true,
-                    myLocationButtonEnabled: false,
-                    initialCameraPosition: CameraPosition(
-                      target: LatLng(
-                        currentLocation!.latitude!,
-                        currentLocation!.longitude!,
-                      ),
-                      zoom: 18,
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        shadowColor: const Color.fromARGB(110, 0, 0, 0),
+        title: const Text("Mapa"),
+        actions: [
+          Builder(
+            builder: (BuildContext context) {
+              // Utiliza Builder para crear un nuevo contexto que contiene el Scaffold
+              return IconButton(
+                icon: Image.asset(
+                  'lib/icons/menu.png', // Reemplaza la ruta con la ubicación de tu imagen
+                ),
+                iconSize: 35,
+                onPressed: () {
+                  Scaffold.of(context).openEndDrawer();
+                },
+              );
+            },
+          ),
+        ],
+      ),
+      endDrawer: EndDrawer(
+        user: FirebaseAuth.instance.currentUser,
+        onSignOutPressed: () {
+          AuthServices.signOut(context);
+        },
+      ),
+      body: locationEnabled
+          ? Stack(
+              children: [
+                GoogleMap(
+                  mapType: MapType.normal,
+                  myLocationEnabled: true,
+                  myLocationButtonEnabled: false,
+                  initialCameraPosition: CameraPosition(
+                    target: LatLng(
+                      currentLocation!.latitude!,
+                      currentLocation!.longitude!,
                     ),
-                    onMapCreated: (GoogleMapController controller) {
-                      controller.setMapStyle(mapStyle);
-                      _controller.complete(controller);
-                    },
-                    markers: _getMarkers(),
+                    zoom: 18,
                   ),
-                  Positioned(
-                    //left: 16,
-                    right: 7,
-                    bottom: 100,
-                    child: FloatingActionButton(
-                      onPressed: _currentLocation,
-                      mini: true,
-                      backgroundColor: Colors.amber[700],
-                      child: const Icon(Icons.location_on),
+                  onMapCreated: (GoogleMapController controller) {
+                    controller.setMapStyle(mapStyle);
+                    _controller.complete(controller);
+                  },
+                  markers: _getMarkers(),
+                ),
+                Positioned(
+                  //left: 16,
+                  right: 7,
+                  bottom: 100,
+                  child: FloatingActionButton(
+                    onPressed: _currentLocation,
+                    mini: true,
+                    backgroundColor: Colors.amber[700],
+                    child: const Icon(Icons.location_on),
+                  ),
+                ),
+              ],
+            )
+          : Container(
+              color: Colors
+                  .white, // Color de fondo del contenedor, ajusta según tus necesidades
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      "No se puede acceder a tu ubicación actual.",
+                      style: TextStyle(fontSize: 17),
+                      textAlign: TextAlign.center,
                     ),
-                  ),
-                ],
-              )
-            : Container(
-                color: Colors
-                    .white, // Color de fondo del contenedor, ajusta según tus necesidades
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text(
-                        "No se puede acceder a tu ubicación actual.",
-                        style: TextStyle(fontSize: 17),
-                        textAlign: TextAlign.center,
+                    const SizedBox(
+                      height: 16,
+                    ), // Espacio adicional entre el texto y el botón
+                    ElevatedButton(
+                      onPressed: getCurrentLocation,
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                            Colors.amber[700]!),
                       ),
-                      const SizedBox(
-                        height: 16,
-                      ), // Espacio adicional entre el texto y el botón
-                      ElevatedButton(
-                        onPressed: getCurrentLocation,
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>(
-                              Colors.amber[700]!),
-                        ),
-                        child: const Text('Reintentar'),
-                      ),
-                    ],
-                  ),
-                )));
+                      child: const Text('Reintentar'),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+    );
   }
 }
