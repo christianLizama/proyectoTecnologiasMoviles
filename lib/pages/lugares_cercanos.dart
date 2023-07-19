@@ -226,7 +226,7 @@ class _LugaresCercanosState extends State<LugaresCercanos> {
                   color: lugar.marcado ? Colors.red : null,
                 ),
                 onPressed: () {
-                  toggleMarcado(index);
+                  toggleMarcado(lugar.id);
                 },
               ),
               onTap: () {
