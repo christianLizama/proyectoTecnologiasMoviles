@@ -94,7 +94,7 @@ class _LugarDetalleState extends State<LugarDetalle> {
             ),
           ),
           onTap: () {
-            Navigator.pop(context);
+            Navigator.pop(context,isFavorite);
           },
         ),
         actions: [
