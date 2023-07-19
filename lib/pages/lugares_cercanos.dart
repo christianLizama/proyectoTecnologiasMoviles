@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import '../services/firebase_services.dart';
@@ -44,10 +46,51 @@ class _LugaresCercanosState extends State<LugaresCercanos> {
     setState(() {});
   }
 
-  void toggleMarcado(int index) {
-    setState(() {
-      lugaresCercanos[index].marcado = !lugaresCercanos[index].marcado;
-    });
+  Future<String?> getUserId() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      String userId = user.uid;
+      return userId;
+    } else {
+      return null;
+    }
+  }
+
+  void toggleMarcado(int index) async {
+    final lugar = lugaresCercanos[index];
+    final lugarId = lugar.id;
+    final lugarNombre = lugar.nombre;
+
+    String? userId = await getUserId();
+    if (userId != null) {
+      try {
+        if (lugar.marcado) {
+          // Eliminar el lugar de la lista de favoritos
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(userId)
+              .update({
+            'favoritos.$lugarId': FieldValue.delete(),
+          });
+        } else {
+          // Agregar el lugar a la lista de favoritos
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(userId)
+              .update({
+            'favoritos.$lugarId.id': lugarId,
+            'favoritos.$lugarId.nombre': lugarNombre,
+          });
+        }
+        setState(() {
+          lugaresCercanos[index].marcado = !lugaresCercanos[index].marcado;
+        });
+      } catch (e) {
+        print('Error al actualizar la lista de favoritos: $e');
+      }
+    } else {
+      print('No hay usuario loggeado');
+    }
   }
 
   void navigateToLugarDetalle(Lugar lugar) {
