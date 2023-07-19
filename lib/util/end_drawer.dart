@@ -90,6 +90,7 @@ class EndDrawer extends StatelessWidget {
                 ),
                 onTap: () {
                   // Agrega el código para la opción
+                  Navigator.pushNamed(context, '/favoritos');
                 },
               ),
               const Divider(

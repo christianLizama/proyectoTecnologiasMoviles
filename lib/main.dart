@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lugares_cercanos/pages/busqueda_voz.dart';
+import 'package:lugares_cercanos/pages/favoritos.dart';
 import 'package:lugares_cercanos/pages/register.dart';
 import 'pages/home_page.dart';
 import 'pages/page_404.dart';
@@ -17,7 +18,6 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(MyApp());
-  
 }
 
 class MyApp extends StatelessWidget {
@@ -26,11 +26,14 @@ class MyApp extends StatelessWidget {
     '/': (context) => const WelcomePage(),
     '/login': (context) => const LoginPage(),
     '/register': (context) => const RegisterPage(),
-    '/home':(context) => const HomePage(),
+    '/home': (context) => const HomePage(),
     '/busquedaVoz': (context) => const BusquedaVoz(),
-    '/lugaresCercanos': (context) => const LugaresCercanos(searchText: '',),
+    '/lugaresCercanos': (context) => const LugaresCercanos(
+          searchText: '',
+        ),
     '/escanearQR': (context) => const EscanearQr(),
     '/verMapa': (context) => const MapSample(),
+    '/favoritos': (context) => const MisFavoritos(),
   };
 
   @override
