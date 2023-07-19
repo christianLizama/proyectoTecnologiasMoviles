@@ -5,6 +5,8 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import '../services/firebase_services.dart';
 import '../util/lugar.dart';
 import 'vista_lugar.dart';
+import '../util/end_drawer.dart'; // Importa el componente EndDrawer
+import '../services/auth.dart'; // Importa el servicio de autenticación
 
 class LugaresCercanos extends StatefulWidget {
   final String searchText;
@@ -124,16 +126,27 @@ class _LugaresCercanosState extends State<LugaresCercanos> {
             },
             icon: const Icon(Icons.search),
           ),
-          IconButton(
-            icon: Image.asset(
-              'lib/icons/menu.png', // Reemplaza la ruta con la ubicación de tu imagen
-            ),
-            iconSize: 35,
-            onPressed: () {
-              Scaffold.of(context).openEndDrawer();
+          Builder(
+            builder: (BuildContext context) {
+              // Utiliza Builder para crear un nuevo contexto vinculado al Scaffold
+              return IconButton(
+                icon: Image.asset(
+                  'lib/icons/menu.png', // Reemplaza la ruta con la ubicación de tu imagen
+                ),
+                iconSize: 35,
+                onPressed: () {
+                  Scaffold.of(context).openEndDrawer();
+                },
+              );
             },
           ),
         ],
+      ),
+      endDrawer: EndDrawer(
+        user: FirebaseAuth.instance.currentUser,
+        onSignOutPressed: () {
+          AuthServices.signOut(context);
+        },
       ),
       body: Padding(
         padding: const EdgeInsets.only(top: 30.0),
