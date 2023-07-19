@@ -26,12 +26,26 @@ class _LugaresCercanosState extends State<LugaresCercanos> {
     super.initState();
     lugaresCercanos = List<Lugar>.empty(growable: true);
 
-    getLugaresFromFirebase().then((lugares) {
-      setState(() {
-        lugaresCercanos = lugares;
-        filteredLugares.addAll(lugaresCercanos);
-        filterLugares(widget.searchText); // Filtrar los lugares inicialmente
-      });
+    getUserId().then((userId) {
+      if (userId != null) {
+        // Obtener los lugares cercanos
+        getLugaresFromFirebase().then((lugares) {
+          setState(() {
+            lugaresCercanos = lugares;
+            filteredLugares.addAll(lugaresCercanos);
+            filterLugares(
+                widget.searchText); // Filtrar los lugares inicialmente
+          });
+        });
+        // Obtener los lugares favoritos del usuario
+        getFavoritosUsuario(userId).then((favoritos) {
+          setState(() {
+            for (var lugar in lugaresCercanos) {
+              lugar.marcado = favoritos.contains(lugar.id);
+            }
+          });
+        });
+      }
     });
     _searchController.text =
         widget.searchText; // Establecer el texto de búsqueda inicial
@@ -95,13 +109,20 @@ class _LugaresCercanosState extends State<LugaresCercanos> {
     }
   }
 
-  void navigateToLugarDetalle(Lugar lugar) {
-    Navigator.push(
+  void navigateToLugarDetalle(Lugar lugar) async {
+    final result = await Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => LugarDetalle(lugar: lugar),
       ),
     );
+
+    if (result != null && result is bool) {
+      // Actualizar la lista de lugares cercanos en función del estado de isFavorite
+      setState(() {
+        lugar.marcado = result;
+      });
+    }
   }
 
   @override
