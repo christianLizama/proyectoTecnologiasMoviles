@@ -35,14 +35,15 @@ class _LugaresCercanosState extends State<LugaresCercanos> {
             filteredLugares.addAll(lugaresCercanos);
             filterLugares(
                 widget.searchText); // Filtrar los lugares inicialmente
-          });
-        });
-        // Obtener los lugares favoritos del usuario
-        getFavoritosUsuario(userId).then((favoritos) {
-          setState(() {
-            for (var lugar in lugaresCercanos) {
-              lugar.marcado = favoritos.contains(lugar.id);
-            }
+
+            // Obtener los lugares favoritos del usuario
+            getFavoritosUsuario(userId).then((favoritos) {
+              for (var lugar in lugaresCercanos) {
+                setState(() {
+                  lugar.marcado = favoritos.contains(lugar.id);
+                });
+              }
+            });
           });
         });
       }
