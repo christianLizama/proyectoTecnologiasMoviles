@@ -36,13 +36,20 @@ class _MisFavoritosState extends State<MisFavoritos> {
     });
   }
 
-  void _navigateToLugarDetalle(Lugar lugar) {
-    Navigator.push(
+  void navigateToLugarDetalle(Lugar lugar) async {
+    final result = await Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => LugarDetalle(lugar: lugar),
       ),
     );
+
+    if (result != null && result is bool) {
+      // Actualizar la lista de lugares cercanos en función del estado de isFavorite
+      setState(() {
+        lugar.marcado = result;
+      });
+    }
   }
 
   @override
@@ -90,7 +97,7 @@ class _MisFavoritosState extends State<MisFavoritos> {
               overflow: TextOverflow.ellipsis,
             ),
             onTap: () {
-              _navigateToLugarDetalle(lugar);
+              navigateToLugarDetalle(lugar);
             },
           );
         },
