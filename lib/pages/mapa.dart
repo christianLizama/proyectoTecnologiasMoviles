@@ -89,6 +89,7 @@ class MapSampleState extends State<MapSample> {
             LatLng(lugar.ubicacion['latitud'], lugar.ubicacion['longitud']),
         infoWindow: InfoWindow(
           title: lugar.nombre,
+          snippet: 'Haz clic aquí para ir al lugar',
           onTap: () {
             navigateToLugarDetalle(
                 lugar); // Navegar a la vista de detalles del lugar
