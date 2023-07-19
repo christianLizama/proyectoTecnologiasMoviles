@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:avatar_glow/avatar_glow.dart';
 
-import '../util/end_drawer.dart';
 import '../util/end_drawer.dart'; // Importa el componente EndDrawer
 import '../services/auth.dart'; // Importa el servicio de autenticación
 
@@ -81,7 +80,23 @@ class _BusquedaVozState extends State<BusquedaVoz> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.amber[700],
-        title: const Text("Búsqueda por voz"),
+        title: const Text("Busqueda por voz"),
+        actions: [
+          Builder(
+            builder: (BuildContext context) {
+              // Utiliza Builder para crear un nuevo contexto que contiene el Scaffold
+              return IconButton(
+                icon: Image.asset(
+                  'lib/icons/menu.png', // Reemplaza la ruta con la ubicación de tu imagen
+                ),
+                iconSize: 35,
+                onPressed: () {
+                  Scaffold.of(context).openEndDrawer();
+                },
+              );
+            },
+          ),
+        ],
       ),
       endDrawer: EndDrawer(
         user: FirebaseAuth.instance.currentUser,
