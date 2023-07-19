@@ -10,6 +10,7 @@ Future<List<Lugar>> getLugaresFromFirebase() async {
       await FirebaseFirestore.instance.collection('lugares').get();
 
   for (var doc in querySnapshot.docs) {
+    String id = doc.id;
     String nombre = doc['nombre'];
     String historia = doc['historia'];
     double valoracion = doc['valoracion'].toDouble();
@@ -17,6 +18,7 @@ Future<List<Lugar>> getLugaresFromFirebase() async {
     Map ubicacion = doc['ubicacion'];
 
     Lugar lugar = Lugar(
+      id: id,
       nombre: nombre,
       historia: historia,
       valoracion: valoracion,
@@ -39,7 +41,7 @@ Future<Lugar?> getLugarByNameFromFirebase(String nombreLugar) async {
 
   if (querySnapshot.docs.isNotEmpty) {
     var doc = querySnapshot.docs.first;
-
+    String id = doc.id;
     String nombre = doc['nombre'];
     String historia = doc['historia'];
     double valoracion = doc['valoracion'].toDouble();
@@ -47,6 +49,7 @@ Future<Lugar?> getLugarByNameFromFirebase(String nombreLugar) async {
     Map ubicacion = doc['ubicacion'];
 
     Lugar lugar = Lugar(
+      id: id,
       nombre: nombre,
       historia: historia,
       valoracion: valoracion,

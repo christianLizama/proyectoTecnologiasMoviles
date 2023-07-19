@@ -1,4 +1,5 @@
 class Lugar {
+  final String id;
   final String nombre;
   final String historia;
   double valoracion;
@@ -7,6 +8,7 @@ class Lugar {
   bool marcado;
 
   Lugar({
+    required this.id,
     required this.nombre,
     required this.historia,
     required this.valoracion,
@@ -16,6 +18,7 @@ class Lugar {
   });
 
   void printValues() {
+    print('Id: $id');
     print('Nombre: $nombre');
     print('Historia: $historia');
     print('Valoración: $valoracion');
