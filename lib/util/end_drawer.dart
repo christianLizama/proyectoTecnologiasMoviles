@@ -68,6 +68,24 @@ class EndDrawer extends StatelessWidget {
               ),
               ListTile(
                 title: const Center(
+                  child: Text('Busqueda por voz'),
+                ),
+                onTap: () {
+                  // Agrega el código para la opción
+                  Navigator.pushNamed(context, '/busquedaVoz');
+                },
+              ),
+              ListTile(
+                title: const Center(
+                  child: Text('Ver mapa'),
+                ),
+                onTap: () {
+                  // Agrega el código para la opción
+                  Navigator.pushNamed(context, '/verMapa');
+                },
+              ),
+              ListTile(
+                title: const Center(
                   child: Text('Favoritos'),
                 ),
                 onTap: () {
@@ -85,7 +103,7 @@ class EndDrawer extends StatelessWidget {
               ElevatedButton.icon(
                 onPressed: onSignOutPressed,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
+                  backgroundColor: Colors.amber[900],
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
                   ),
