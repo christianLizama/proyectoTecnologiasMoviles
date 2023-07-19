@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lugares_cercanos/services/auth.dart';
 import '../util/boton.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import '../util/end_drawer.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -47,94 +48,11 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      endDrawer: Theme(
-        data: Theme.of(context).copyWith(
-          canvasColor: Colors.transparent,
-        ),
-        child: Drawer(
-          child: Container(
-            decoration: const BoxDecoration(
-              color: Color.fromARGB(150, 255, 255, 255),
-            ),
-            child: ListView(
-              padding: EdgeInsets.symmetric(
-                  vertical: MediaQuery.of(context).size.height * 0.05),
-              children: <Widget>[
-                ListTile(
-                  title: Center(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(Icons.person),
-                        const SizedBox(width: 5),
-                        Text(user?.displayName ?? 'Nombre de usuario'), // Mostrar el nombre del usuario actualmente autenticado
-                      ],
-                    ),
-                  ),
-                  onTap: () {
-                    // Agrega el código para la opción
-                  },
-                ),
-                const Divider(
-                  color: Color.fromARGB(150, 255, 255, 255),
-                  height: 20,
-                  thickness: 2,
-                  indent: 20,
-                  endIndent: 20,
-                ),
-                ListTile(
-                  title: const Center(
-                    child: Text('Lugares cercanos'),
-                  ),
-                  onTap: () {
-                    // Agrega el código para la opción
-                    Navigator.pushNamed(context, '/lugaresCercanos');
-                  },
-                ),
-                ListTile(
-                  title: const Center(
-                    child: Text('Escanear QR'),
-                  ),
-                  onTap: () {
-                    // Agrega el código para la opción
-                    Navigator.pushNamed(context, '/escanearQR');
-                  },
-                ),
-                ListTile(
-                  title: const Center(
-                    child: Text('Favoritos'),
-                  ),
-                  onTap: () {
-                    // Agrega el código para la opción
-                  },
-                ),
-                const Divider(
-                  color: Color.fromARGB(150, 255, 255, 255),
-                  height: 20,
-                  thickness: 2,
-                  indent: 20,
-                  endIndent: 20,
-                ),
-                const SizedBox(height: 15),
-                ElevatedButton.icon(
-                  onPressed: () {
-                    // Agrega el código para cerrar la sesión aquí
-                    AuthServices.signOut(context);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    minimumSize: const Size(10, 50),
-                  ),
-                  icon: const Icon(Icons.logout),
-                  label: const Text('Cerrar sesión'),
-                ),
-              ],
-            ),
-          ),
-        ),
+      endDrawer: EndDrawer(
+        user: user,
+        onSignOutPressed: () {
+          AuthServices.signOut(context);
+        },
       ),
       body: Container(
         decoration: const BoxDecoration(
