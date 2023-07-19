@@ -1,8 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import '../util/lugar.dart';
+import '../services/firebase_services.dart';
 
 class LugarDetalle extends StatefulWidget {
   final Lugar lugar;
@@ -16,6 +18,7 @@ class LugarDetalle extends StatefulWidget {
 class _LugarDetalleState extends State<LugarDetalle> {
   bool isFavorite = false;
   bool isSpeaking = false;
+  String userId = '';
   final FlutterTts flutterTts = FlutterTts();
 
   Future _speak(String text) async {
@@ -26,6 +29,33 @@ class _LugarDetalleState extends State<LugarDetalle> {
 
   Future _pause() async {
     await flutterTts.pause();
+  }
+
+  Future<String?> getUserId() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      setState(() {
+        userId = user.uid;
+      });
+    } else {
+      return null;
+    }
+    return null;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getUserId();
+    checkFavorite();
+  }
+
+  void checkFavorite() async {
+    List<String> favoritos = await getFavoritosUsuario(userId);
+    bool isLugarFavorito = favoritos.contains(widget.lugar.id);
+    setState(() {
+      isFavorite = isLugarFavorito;
+    });
   }
 
   @override
@@ -73,15 +103,18 @@ class _LugarDetalleState extends State<LugarDetalle> {
               setState(() {
                 isFavorite = !isFavorite;
               });
+              // Actualizar la lista de favoritos en la base de datos según el estado de isFavorite
+              updateFavoriteInDatabase(
+                  userId, widget.lugar.id, isFavorite, widget.lugar.nombre);
             },
             child: Container(
               margin: const EdgeInsets.all(8),
               width: 40,
               height: 50,
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 shape: BoxShape.rectangle,
-                color: Color.fromRGBO(255, 160, 0, 1),
-                borderRadius: BorderRadius.all(Radius.circular(10)),
+                color: Colors.amber[700],
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
               ),
               child: Center(
                 child: Icon(
