@@ -1,8 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:avatar_glow/avatar_glow.dart';
 
-import 'lugares_cercanos.dart';
+import '../util/end_drawer.dart';
+import '../util/end_drawer.dart'; // Importa el componente EndDrawer
+import '../services/auth.dart'; // Importa el servicio de autenticación
 
 class BusquedaVoz extends StatefulWidget {
   const BusquedaVoz({Key? key}) : super(key: key);
@@ -57,10 +60,10 @@ class _BusquedaVozState extends State<BusquedaVoz> {
   }
 
   void _navigateToResultPage(String searchText) {
-     Navigator.push(
+    Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => LugaresCercanos(searchText: searchText),
+        builder: (context) => ResultPage(searchText: searchText),
       ),
     );
   }
@@ -79,6 +82,12 @@ class _BusquedaVozState extends State<BusquedaVoz> {
       appBar: AppBar(
         backgroundColor: Colors.amber[700],
         title: const Text("Búsqueda por voz"),
+      ),
+      endDrawer: EndDrawer(
+        user: FirebaseAuth.instance.currentUser,
+        onSignOutPressed: () {
+          AuthServices.signOut(context);
+        },
       ),
       body: Center(
         child: Column(
