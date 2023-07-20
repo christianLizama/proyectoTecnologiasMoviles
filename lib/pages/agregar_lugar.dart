@@ -16,8 +16,8 @@ class _AgregarLugarScreenState extends State<AgregarLugarScreen> {
   final _formKey = GlobalKey<FormState>();
   String historia = '';
   String nombre = '';
-  String latitud = '';
-  String longitud = '';
+  double latitud = 0.0;
+  double longitud = 0.0;
   double valoracion = 0.0;
   List<String> valoraciones = [];
   List<File?> _images = [];
@@ -113,7 +113,7 @@ class _AgregarLugarScreenState extends State<AgregarLugarScreen> {
                     return null;
                   },
                   onSaved: (value) {
-                    latitud = value!;
+                    latitud = double.tryParse(value!) ?? 0.0;
                   },
                 ),
                 TextFormField(
@@ -125,8 +125,12 @@ class _AgregarLugarScreenState extends State<AgregarLugarScreen> {
                     return null;
                   },
                   onSaved: (value) {
-                    longitud = value!;
+                    longitud = double.tryParse(value!) ?? 0.0;
                   },
+                ),
+                ElevatedButton(
+                  onPressed: _pickImages,
+                  child: const Text('Seleccionar Imágenes'),
                 ),
                 ElevatedButton(
                   onPressed: () async {
@@ -165,8 +169,8 @@ class _AgregarLugarScreenState extends State<AgregarLugarScreen> {
                           setState(() {
                             historia = '';
                             nombre = '';
-                            latitud = '';
-                            longitud = '';
+                            latitud = 0.0;
+                            longitud = 0.0;
                             valoracion = 0.0;
                             valoraciones = [];
                             _images = [];
@@ -179,10 +183,6 @@ class _AgregarLugarScreenState extends State<AgregarLugarScreen> {
                     }
                   },
                   child: const Text('Agregar Lugar'),
-                ),
-                ElevatedButton(
-                  onPressed: _pickImages,
-                  child: const Text('Seleccionar Imágenes'),
                 ),
                 Column(
                   children: _images.map((image) {

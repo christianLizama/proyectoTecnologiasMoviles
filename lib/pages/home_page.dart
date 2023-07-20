@@ -4,6 +4,7 @@ import '../util/boton.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../util/end_drawer.dart';
 
+// ignore: must_be_immutable
 class HomePage extends StatelessWidget {
   // Constantes de padding (ajústalas según tus necesidades)
   final double horizontalPadding = 30;
