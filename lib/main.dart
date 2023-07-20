@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lugares_cercanos/pages/agregar_lugar.dart';
 import 'package:lugares_cercanos/pages/busqueda_voz.dart';
 import 'package:lugares_cercanos/pages/favoritos.dart';
 import 'package:lugares_cercanos/pages/register.dart';
@@ -34,6 +35,7 @@ class MyApp extends StatelessWidget {
     '/escanearQR': (context) => const EscanearQr(),
     '/verMapa': (context) => const MapSample(),
     '/favoritos': (context) => const MisFavoritos(),
+    '/addLugar' : (context) => const AgregarLugarScreen(),
   };
 
   @override

@@ -93,6 +93,15 @@ class EndDrawer extends StatelessWidget {
                   Navigator.pushNamed(context, '/favoritos');
                 },
               ),
+              ListTile(
+                title: const Center(
+                  child: Text('Agregar Lugar'),
+                ),
+                onTap: () {
+                  // Agrega el código para la opción
+                  Navigator.pushNamed(context, '/addLugar');
+                },
+              ),
               const Divider(
                 color: Color.fromARGB(150, 255, 255, 255),
                 height: 20,

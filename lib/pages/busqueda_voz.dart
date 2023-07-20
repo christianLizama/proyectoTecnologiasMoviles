@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:lugares_cercanos/pages/lugares_cercanos.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:avatar_glow/avatar_glow.dart';
 
@@ -62,7 +63,7 @@ class _BusquedaVozState extends State<BusquedaVoz> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => ResultPage(searchText: searchText),
+        builder: (context) => LugaresCercanos(searchText: searchText),
       ),
     );
   }
