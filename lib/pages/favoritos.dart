@@ -204,6 +204,7 @@ class _MisFavoritosState extends State<MisFavoritos> {
         onSignOutPressed: () {
           AuthServices.signOut(context);
         },
+        vistaPrevia: '/favoritos',
       ),
       body: Padding(
         padding: const EdgeInsets.only(top: 30.0),

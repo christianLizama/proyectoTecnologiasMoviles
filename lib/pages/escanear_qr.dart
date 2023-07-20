@@ -67,7 +67,6 @@ class _EscanearQrState extends State<EscanearQr> {
                   'lib/icons/menu.png', // Reemplaza la ruta con la ubicación de tu imagen
                 ),
                 iconSize: 35,
-                
                 onPressed: () {
                   Scaffold.of(context).openEndDrawer();
                 },
@@ -81,6 +80,7 @@ class _EscanearQrState extends State<EscanearQr> {
         onSignOutPressed: () {
           AuthServices.signOut(context);
         },
+        vistaPrevia: '/escanearQR',
       ),
       body: Column(
         children: [
