@@ -104,6 +104,7 @@ class _BusquedaVozState extends State<BusquedaVoz> {
         onSignOutPressed: () {
           AuthServices.signOut(context);
         },
+        vistaPrevia: '/busquedaVoz',
       ),
       body: Center(
         child: Column(

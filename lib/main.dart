@@ -27,15 +27,17 @@ class MyApp extends StatelessWidget {
     '/': (context) => const WelcomePage(),
     '/login': (context) => const LoginPage(),
     '/register': (context) => const RegisterPage(),
-    '/home': (context) => const HomePage(),
+    '/home': (context) => HomePage(),
     '/busquedaVoz': (context) => const BusquedaVoz(),
     '/lugaresCercanos': (context) => const LugaresCercanos(
           searchText: '',
         ),
     '/escanearQR': (context) => const EscanearQr(),
     '/verMapa': (context) => const MapSample(),
-    '/favoritos': (context) => const MisFavoritos(),
     '/addLugar' : (context) => const AgregarLugarScreen(),
+    '/favoritos': (context) => const MisFavoritos(
+          searchText: '',
+        ),
   };
 
   @override

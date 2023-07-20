@@ -15,8 +15,8 @@ Future<void> updateFavoriteInDatabase(
 
       if (isFavorite) {
         favoritos[lugarId] = {
-            'id': lugarId,
-            'nombre': nombreLugar,
+          'id': lugarId,
+          'nombre': nombreLugar,
         };
       } else {
         // Eliminar el lugar de la lista de favoritos
@@ -40,6 +40,53 @@ Future<List<String>> getFavoritosUsuario(String userId) async {
       if (data != null && data['favoritos'] != null) {
         final favoritos = Map<String, dynamic>.from(data['favoritos']);
         return favoritos.keys.toList();
+      }
+    }
+  } catch (e) {
+    print('Error al obtener los favoritos del usuario: $e');
+  }
+
+  return [];
+}
+
+Future<List<Lugar>> getFavoritosCompleto(String userId) async {
+  try {
+    List<Lugar> lugaresFavoritos = [];
+    final snapshot =
+        await FirebaseFirestore.instance.collection('users').doc(userId).get();
+
+    if (snapshot.exists) {
+      final data = snapshot.data();
+      if (data != null && data['favoritos'] != null) {
+        final favoritos = Map<String, dynamic>.from(data['favoritos']);
+        final List<String> favoritosIds = favoritos.keys.toList();
+
+        final QuerySnapshot lugaresSnapshot = await FirebaseFirestore.instance
+            .collection('lugares')
+            .where(FieldPath.documentId, whereIn: favoritosIds)
+            .get();
+
+        for (var doc in lugaresSnapshot.docs) {
+          String id = doc.id;
+          String nombre = doc['nombre'];
+          String historia = doc['historia'];
+          double valoracion = doc['valoracion'].toDouble();
+          List valoraciones = doc['valoraciones'];
+          Map ubicacion = doc['ubicacion'];
+
+          Lugar lugar = Lugar(
+            id: id,
+            nombre: nombre,
+            historia: historia,
+            valoracion: valoracion,
+            valoraciones: valoraciones,
+            ubicacion: ubicacion,
+          );
+
+          lugaresFavoritos.add(lugar);
+        }
+
+        return lugaresFavoritos;
       }
     }
   } catch (e) {

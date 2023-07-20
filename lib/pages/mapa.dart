@@ -162,6 +162,7 @@ class MapSampleState extends State<MapSample> {
         onSignOutPressed: () {
           AuthServices.signOut(context);
         },
+        vistaPrevia: '/verMapa',
       ),
       body: locationEnabled
           ? Stack(
