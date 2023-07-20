@@ -71,6 +71,7 @@ class _AgregarLugarScreenState extends State<AgregarLugarScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Agregar Lugar'),
+        backgroundColor: Colors.amber[700],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -129,9 +130,11 @@ class _AgregarLugarScreenState extends State<AgregarLugarScreen> {
                   },
                 ),
                 ElevatedButton(
-                  onPressed: _pickImages,
-                  child: const Text('Seleccionar Imágenes'),
-                ),
+                    onPressed: _pickImages,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.amber[700],
+                    ),
+                    child: const Text('Seleccionar Imágenes')),
                 ElevatedButton(
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
@@ -182,6 +185,9 @@ class _AgregarLugarScreenState extends State<AgregarLugarScreen> {
                       }
                     }
                   },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.amber[700],
+                  ),
                   child: const Text('Agregar Lugar'),
                 ),
                 Column(
