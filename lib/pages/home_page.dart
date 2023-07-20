@@ -16,6 +16,8 @@ class HomePage extends StatelessWidget {
     ["Ver mapa", "lib/icons/mapa.png", '/verMapa'],
   ];
 
+  HomePage({super.key});
+
   @override
   Widget build(BuildContext context) {
     // Obtener información del usuario actualmente autenticado

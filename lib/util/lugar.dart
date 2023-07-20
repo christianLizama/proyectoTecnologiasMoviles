@@ -6,6 +6,7 @@ class Lugar {
   List valoraciones;
   Map ubicacion;
   bool marcado;
+  List imagenes;
 
   Lugar({
     required this.id,
@@ -14,6 +15,7 @@ class Lugar {
     required this.valoracion,
     required this.valoraciones,
     required this.ubicacion,
+    required this.imagenes,
     this.marcado = false,
   });
 
@@ -25,5 +27,6 @@ class Lugar {
     print('Valoraciones: $valoraciones');
     print('Ubicación: $ubicacion');
     print('Marcado: $marcado');
+    print('imagenes: $imagenes');
   }
 }
