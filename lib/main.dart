@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
     '/': (context) => const WelcomePage(),
     '/login': (context) => const LoginPage(),
     '/register': (context) => const RegisterPage(),
-    '/home': (context) => const HomePage(),
+    '/home': (context) => HomePage(),
     '/busquedaVoz': (context) => const BusquedaVoz(),
     '/lugaresCercanos': (context) => const LugaresCercanos(
           searchText: '',
