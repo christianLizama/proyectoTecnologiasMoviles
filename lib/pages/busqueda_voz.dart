@@ -124,18 +124,37 @@ class _BusquedaVozState extends State<BusquedaVoz> {
               repeat: true,
               child: FloatingActionButton(
                 onPressed: _listen,
+                backgroundColor: Colors.amber[700],
                 child: Icon(_isListening ? Icons.mic : Icons.mic_none),
               ),
             ),
-            if (_showResultButton)
-              ElevatedButton(
-                onPressed: () => _navigateToResultPage(_text),
-                child: const Text('Ver resultado'),
-              ),
-            if (_showRejectButton)
-              ElevatedButton(
-                onPressed: _reset,
-                child: const Text('Rechazar'),
+            if (_showResultButton ||
+                _showRejectButton) // Agregamos esta condición para mostrar ambos botones juntos
+              Row(
+                mainAxisAlignment: MainAxisAlignment
+                    .center, // Centrar los botones en el eje horizontal
+                children: [
+                  if (_showResultButton)
+                    ElevatedButton.icon(
+                      onPressed: () => _navigateToResultPage(_text),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green[400],
+                      ),
+                      icon: const Icon(Icons.check), // Icono de "tick"
+                      label: const Text('Ver resultado'),
+                    ),
+                  const SizedBox(
+                      width: 10), // Separación de 10 unidades de ancho
+                  if (_showRejectButton)
+                    ElevatedButton.icon(
+                      onPressed: _reset,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red[400],
+                      ),
+                      icon: const Icon(Icons.clear), // Icono de "equis"
+                      label: const Text('Rechazar'),
+                    ),
+                ],
               ),
           ],
         ),

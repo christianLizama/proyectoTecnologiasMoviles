@@ -107,11 +107,18 @@ class _LoginPageState extends State<LoginPage> {
                     // ======== Email ========
                     TextFormField(
                       key: const ValueKey('email'),
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         hintText: 'Ingrese su Email',
-                        prefixIcon: Icon(Icons.email),
-                        border: OutlineInputBorder(),
+                        prefixIcon:
+                            const Icon(Icons.email, color: Colors.amber),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                              color: Colors
+                                  .amber), // Color del borde cuando está enfocado
+                          borderRadius: BorderRadius.circular(8),
+                        ),
                       ),
+                      style: TextStyle(color: Colors.black), // Color del texto
                       validator: (value) {
                         if (value!.isEmpty || !value.contains('@')) {
                           return 'Por favor ingrese un Email válido';
@@ -132,7 +139,13 @@ class _LoginPageState extends State<LoginPage> {
                       obscureText: !isPasswordVisible,
                       decoration: InputDecoration(
                         hintText: 'Ingrese Contraseña',
-                        prefixIcon: const Icon(Icons.lock),
+                        prefixIcon: const Icon(Icons.lock, color: Colors.amber),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                              color: Colors
+                                  .amber), // Color del borde cuando está enfocado
+                          borderRadius: BorderRadius.circular(8),
+                        ),
                         suffixIcon: GestureDetector(
                           onTap: () {
                             setState(() {
@@ -140,10 +153,10 @@ class _LoginPageState extends State<LoginPage> {
                             });
                           },
                           child: Icon(
-                            isPasswordVisible
-                                ? Icons.visibility
-                                : Icons.visibility_off,
-                          ),
+                              isPasswordVisible
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                              color: Colors.amber),
                         ),
                         border: const OutlineInputBorder(),
                       ),
@@ -173,6 +186,10 @@ class _LoginPageState extends State<LoginPage> {
                             AuthServices.signinUser(email, password, context);
                           }
                         },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.amber[
+                              700], // Aquí se establece el color amber[700]
+                        ),
                         child: const Text('Iniciar Sesión'),
                       ),
                     ),

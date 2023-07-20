@@ -14,6 +14,7 @@ class _WelcomePageState extends State<WelcomePage> {
   void initState() {
     super.initState();
   }
+
   void navigateToLogin() {
     Navigator.push(
       context,
@@ -31,7 +32,7 @@ class _WelcomePageState extends State<WelcomePage> {
       ),
     );
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -157,7 +158,7 @@ class _WelcomePageState extends State<WelcomePage> {
               child: const Text(
                 'Iniciar Sesión',
                 style: TextStyle(
-                  color: Colors.blue,
+                  color: Color.fromARGB(255, 255, 160, 0),
                 ),
               ),
             ),

@@ -35,6 +35,7 @@ class HomePage extends StatelessWidget {
         elevation: 0.0,
         backgroundColor: const Color.fromARGB(0, 0, 0, 0),
         shadowColor: const Color.fromARGB(0, 244, 67, 54),
+        automaticallyImplyLeading: false,
         actions: <Widget>[
           Builder(
             builder: (BuildContext context) {
