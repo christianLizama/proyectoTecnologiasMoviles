@@ -33,7 +33,9 @@ class MyApp extends StatelessWidget {
         ),
     '/escanearQR': (context) => const EscanearQr(),
     '/verMapa': (context) => const MapSample(),
-    '/favoritos': (context) => const MisFavoritos(),
+    '/favoritos': (context) => const MisFavoritos(
+          searchText: '',
+        ),
   };
 
   @override
