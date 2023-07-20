@@ -73,6 +73,7 @@ Future<List<Lugar>> getFavoritosCompleto(String userId) async {
           double valoracion = doc['valoracion'].toDouble();
           List valoraciones = doc['valoraciones'];
           Map ubicacion = doc['ubicacion'];
+          List imagenes = doc['imagenes']; 
 
           Lugar lugar = Lugar(
             id: id,
@@ -81,6 +82,7 @@ Future<List<Lugar>> getFavoritosCompleto(String userId) async {
             valoracion: valoracion,
             valoraciones: valoraciones,
             ubicacion: ubicacion,
+            imagenes: imagenes,
           );
 
           lugaresFavoritos.add(lugar);
@@ -109,6 +111,7 @@ Future<List<Lugar>> getLugaresFromFirebase() async {
     double valoracion = doc['valoracion'].toDouble();
     List valoraciones = doc['valoraciones'];
     Map ubicacion = doc['ubicacion'];
+    List imagenes = doc['imagenes'];  
 
     Lugar lugar = Lugar(
       id: id,
@@ -117,6 +120,7 @@ Future<List<Lugar>> getLugaresFromFirebase() async {
       valoracion: valoracion,
       valoraciones: valoraciones,
       ubicacion: ubicacion,
+      imagenes: imagenes,
     );
 
     lugares.add(lugar);
@@ -140,6 +144,7 @@ Future<Lugar?> getLugarByNameFromFirebase(String nombreLugar) async {
     double valoracion = doc['valoracion'].toDouble();
     List valoraciones = doc['valoraciones'];
     Map ubicacion = doc['ubicacion'];
+    List imagenes = doc['imagenes'];
 
     Lugar lugar = Lugar(
       id: id,
@@ -148,6 +153,7 @@ Future<Lugar?> getLugarByNameFromFirebase(String nombreLugar) async {
       valoracion: valoracion,
       valoraciones: valoraciones,
       ubicacion: ubicacion,
+      imagenes: imagenes,
     );
 
     return lugar;

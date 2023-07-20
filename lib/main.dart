@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:lugares_cercanos/pages/agregar_lugar.dart';
 import 'package:lugares_cercanos/pages/busqueda_voz.dart';
 import 'package:lugares_cercanos/pages/favoritos.dart';
@@ -15,6 +16,7 @@ import 'pages/login_init.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -34,7 +36,7 @@ class MyApp extends StatelessWidget {
         ),
     '/escanearQR': (context) => const EscanearQr(),
     '/verMapa': (context) => const MapSample(),
-    '/addLugar' : (context) => const AgregarLugarScreen(),
+    '/addLugar': (context) => const AgregarLugarScreen(),
     '/favoritos': (context) => const MisFavoritos(
           searchText: '',
         ),
