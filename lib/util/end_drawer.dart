@@ -102,6 +102,16 @@ class EndDrawer extends StatelessWidget {
                         arguments: '/favoritos');
                   },
                 ),
+              if (_vistaPrevia != '/addLugar')
+                ListTile(
+                  title: const Center(
+                    child: Text('Agregar Lugar'),
+                  ),
+                  onTap: () {
+                    Navigator.pushNamed(context, '/addLugar',
+                        arguments: '/addLugar');
+                  },
+                ),
               const Divider(
                 color: Color.fromARGB(150, 255, 255, 255),
                 height: 20,

@@ -20,6 +20,7 @@ class _LugarDetalleState extends State<LugarDetalle> {
   bool isSpeaking = false;
   String userId = '';
   final FlutterTts flutterTts = FlutterTts();
+  int currentImageIndex = 0;
 
   Future _speak(String text) async {
     await flutterTts.setLanguage('es-LA');
@@ -69,6 +70,46 @@ class _LugarDetalleState extends State<LugarDetalle> {
     final double carouselHeight = MediaQuery.of(context).size.height * 0.35;
     final double carouselWidth = MediaQuery.of(context).size.width;
 
+    // Obtener la lista de URLs de las imágenes
+    List imagenes = widget.lugar.imagenes;
+
+    // Función para abrir el cuadro de diálogo con la imagen seleccionada en grande
+    void showImageDialog() {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            backgroundColor: Colors.black,
+            contentPadding: EdgeInsets.zero,
+            insetPadding: EdgeInsets.zero,
+            content: SizedBox(
+              width: double.infinity,
+              height: double.infinity,
+              child: Stack(
+                alignment: Alignment.topLeft,
+                children: [
+                  Image.network(
+                    widget.lugar.imagenes[currentImageIndex],
+                    fit: BoxFit.cover,
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    icon: const Icon(
+                      Icons.close,
+                      color: Colors.white,
+                      size: 32,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      );
+    }
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -77,8 +118,7 @@ class _LugarDetalleState extends State<LugarDetalle> {
         leading: GestureDetector(
           child: SizedBox(
             child: Transform.scale(
-              scale:
-                  0.75, // Ajusta este valor para cambiar el tamaño del contenedor
+              scale: 0.75,
               child: Container(
                 decoration: const BoxDecoration(
                     shape: BoxShape.rectangle,
@@ -103,7 +143,6 @@ class _LugarDetalleState extends State<LugarDetalle> {
               setState(() {
                 isFavorite = !isFavorite;
               });
-              // Actualizar la lista de favoritos en la base de datos según el estado de isFavorite
               updateFavoriteInDatabase(
                   userId, widget.lugar.id, isFavorite, widget.lugar.nombre);
             },
@@ -133,34 +172,52 @@ class _LugarDetalleState extends State<LugarDetalle> {
             SizedBox(
               height: carouselHeight,
               width: carouselWidth,
-              child: CarouselSlider(
-                options: CarouselOptions(
-                  height: carouselHeight,
-                  viewportFraction: 1.0,
-                  enlargeCenterPage: false,
-                  aspectRatio: 16 / 9,
-                ),
-                items: [
-                  Stack(
-                    children: [
-                      Image.network(
-                        'https://new.diariolaprensa.cl/wp-content/uploads/2023/04/F-1-CERRO-Y-TURISMO.jpg',
-                        fit: BoxFit.cover,
-                        width: carouselWidth,
+              child: imagenes.isNotEmpty
+                  ? CarouselSlider(
+                      options: CarouselOptions(
+                        height: carouselHeight,
+                        viewportFraction: 1.0,
+                        enlargeCenterPage: false,
+                        aspectRatio: 16 / 9,
+                        onPageChanged: (index, _) {
+                          print(index);
+                          setState(() {
+                            currentImageIndex = index;
+                          });
+                        },
                       ),
-                    ],
-                  ),
-                  Stack(
-                    children: [
-                      Image.network(
-                        'https://www.monumentos.gob.cl/sites/default/files/styles/slide_monumentos/public/image-monumentos/ZT_00425_2011_CMN%20%282%29.JPG?itok=S89AiYuD',
-                        fit: BoxFit.cover,
+                      items: imagenes.map((imagenUrl) {
+                        return GestureDetector(
+                          onTap:
+                              showImageDialog, // Abrir el cuadro de diálogo al hacer clic en la imagen
+                          child: Stack(
+                            children: [
+                              Image.network(
+                                imagenUrl,
+                                fit: BoxFit.cover,
+                                width: carouselWidth,
+                              ),
+                            ],
+                          ),
+                        );
+                      }).toList(),
+                    )
+                  : Center(
+                      child: Container(
                         width: carouselWidth,
+                        height: carouselHeight,
+                        color: Colors.grey[300],
+                        child: const Center(
+                          child: Text(
+                            'No posee imagen',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
                       ),
-                    ],
-                  ),
-                ],
-              ),
+                    ),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
