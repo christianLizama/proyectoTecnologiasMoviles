@@ -2,11 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class EndDrawer extends StatelessWidget {
+  final String? _vistaPrevia;
+
   const EndDrawer({
     Key? key,
     required this.user,
     required this.onSignOutPressed,
-  }) : super(key: key);
+    String? vistaPrevia,
+  })  : _vistaPrevia = vistaPrevia,
+        super(key: key);
 
   final User? user;
   final VoidCallback onSignOutPressed;
@@ -48,51 +52,56 @@ class EndDrawer extends StatelessWidget {
                 indent: 20,
                 endIndent: 20,
               ),
-              ListTile(
-                title: const Center(
-                  child: Text('Lugares cercanos'),
+              if (_vistaPrevia != '/lugaresCercanos')
+                ListTile(
+                  title: const Center(
+                    child: Text('Lugares cercanos'),
+                  ),
+                  onTap: () {
+                    Navigator.pushNamed(context, '/lugaresCercanos',
+                        arguments: '/lugaresCercanos');
+                  },
                 ),
-                onTap: () {
-                  // Agrega el código para la opción
-                  Navigator.pushNamed(context, '/lugaresCercanos');
-                },
-              ),
-              ListTile(
-                title: const Center(
-                  child: Text('Escanear QR'),
+              if (_vistaPrevia != '/escanearQR')
+                ListTile(
+                  title: const Center(
+                    child: Text('Escanear QR'),
+                  ),
+                  onTap: () {
+                    Navigator.pushNamed(context, '/escanearQR',
+                        arguments: '/escanearQR');
+                  },
                 ),
-                onTap: () {
-                  // Agrega el código para la opción
-                  Navigator.pushNamed(context, '/escanearQR');
-                },
-              ),
-              ListTile(
-                title: const Center(
-                  child: Text('Busqueda por voz'),
+              if (_vistaPrevia != '/busquedaVoz')
+                ListTile(
+                  title: const Center(
+                    child: Text('Búsqueda por voz'),
+                  ),
+                  onTap: () {
+                    Navigator.pushNamed(context, '/busquedaVoz',
+                        arguments: '/busquedaVoz');
+                  },
                 ),
-                onTap: () {
-                  // Agrega el código para la opción
-                  Navigator.pushNamed(context, '/busquedaVoz');
-                },
-              ),
-              ListTile(
-                title: const Center(
-                  child: Text('Ver mapa'),
+              if (_vistaPrevia != '/verMapa')
+                ListTile(
+                  title: const Center(
+                    child: Text('Ver mapa'),
+                  ),
+                  onTap: () {
+                    Navigator.pushNamed(context, '/verMapa',
+                        arguments: '/verMapa');
+                  },
                 ),
-                onTap: () {
-                  // Agrega el código para la opción
-                  Navigator.pushNamed(context, '/verMapa');
-                },
-              ),
-              ListTile(
-                title: const Center(
-                  child: Text('Favoritos'),
+              if (_vistaPrevia != '/favoritos')
+                ListTile(
+                  title: const Center(
+                    child: Text('Favoritos'),
+                  ),
+                  onTap: () {
+                    Navigator.pushNamed(context, '/favoritos',
+                        arguments: '/favoritos');
+                  },
                 ),
-                onTap: () {
-                  // Agrega el código para la opción
-                  Navigator.pushNamed(context, '/favoritos');
-                },
-              ),
               const Divider(
                 color: Color.fromARGB(150, 255, 255, 255),
                 height: 20,

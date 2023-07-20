@@ -168,6 +168,7 @@ class _LugaresCercanosState extends State<LugaresCercanos> {
         onSignOutPressed: () {
           AuthServices.signOut(context);
         },
+        vistaPrevia: '/lugaresCercanos',
       ),
       body: Padding(
         padding: const EdgeInsets.only(top: 30.0),

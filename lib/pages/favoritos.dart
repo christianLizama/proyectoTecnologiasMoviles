@@ -1,48 +1,164 @@
-import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../services/auth.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import '../services/firebase_services.dart';
-import '../util/end_drawer.dart';
 import '../util/lugar.dart';
 import 'vista_lugar.dart';
+import '../util/end_drawer.dart'; // Importa el componente EndDrawer
+import '../services/auth.dart'; // Importa el servicio de autenticación
 
 class MisFavoritos extends StatefulWidget {
-  const MisFavoritos({Key? key}) : super(key: key);
+  final String searchText;
+  const MisFavoritos({Key? key, required this.searchText}) : super(key: key);
 
   @override
   State<MisFavoritos> createState() => _MisFavoritosState();
 }
 
 class _MisFavoritosState extends State<MisFavoritos> {
-  late User _user;
-  List<Lugar> _favoritos = [];
+  final TextEditingController _searchController = TextEditingController();
+  List<Lugar> lugaresCercanos = [];
+  List<Lugar> filteredLugares = [];
 
   @override
   void initState() {
     super.initState();
-    _user = FirebaseAuth.instance.currentUser!;
-    _getFavoritos();
+    lugaresCercanos = List<Lugar>.empty(growable: true);
+
+    getUserId().then((userId) {
+      if (userId != null) {
+        // Obtener los lugares cercanos
+        getFavoritosCompleto(userId).then((lugares) {
+          setState(() {
+            print(lugares);
+
+            lugaresCercanos = lugares.cast<Lugar>();
+            filteredLugares.addAll(lugaresCercanos);
+            filterLugares(
+                widget.searchText); // Filtrar los lugares inicialmente
+
+            // Obtener los lugares favoritos del usuario
+            getFavoritosUsuario(userId).then((favoritos) {
+              for (var lugar in lugaresCercanos) {
+                setState(() {
+                  lugar.marcado = favoritos.contains(lugar.id);
+                });
+              }
+            });
+          });
+        });
+      }
+    });
+    _searchController.text =
+        widget.searchText; // Establecer el texto de búsqueda inicial
   }
 
-  void _getFavoritos() async {
-    List<String> favoritosIds = await getFavoritosUsuario(_user.uid);
-    List<Lugar> lugares = await getLugaresFromFirebase();
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Actualizar los lugares cada vez que la vista se muestra
+    actualizarLugares();
+  }
 
-    List<Lugar> favoritos =
-        lugares.where((lugar) => favoritosIds.contains(lugar.id)).toList();
+  void actualizarLugares() {
+    getUserId().then((userId) {
+      if (userId != null) {
+        // Obtener los lugares cercanos
+        getFavoritosCompleto(userId).then((lugares) {
+          setState(() {
+            lugaresCercanos = lugares.cast<Lugar>();
+            filteredLugares.clear();
+            filteredLugares.addAll(lugaresCercanos);
+            filterLugares(
+                widget.searchText); // Filtrar los lugares inicialmente
 
-    setState(() {
-      _favoritos = favoritos;
+            // Obtener los lugares favoritos del usuario
+            getFavoritosUsuario(userId).then((favoritos) {
+              for (var lugar in lugaresCercanos) {
+                setState(() {
+                  lugar.marcado = favoritos.contains(lugar.id);
+                });
+              }
+            });
+          });
+        });
+      }
     });
   }
 
-  void _navigateToLugarDetalle(Lugar lugar) {
-    Navigator.push(
+  void filterLugares(String searchText) {
+    filteredLugares.clear();
+    if (searchText.isEmpty) {
+      filteredLugares.addAll(lugaresCercanos);
+    } else {
+      filteredLugares.addAll(lugaresCercanos.where((lugar) =>
+          lugar.nombre.toLowerCase().contains(searchText.toLowerCase())));
+    }
+    setState(() {});
+  }
+
+  Future<String?> getUserId() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      String userId = user.uid;
+      return userId;
+    } else {
+      return null;
+    }
+  }
+
+  void removeLugarFromList(String lugarId) {
+    setState(() {
+      lugaresCercanos.removeWhere((lugar) => lugar.id == lugarId);
+      filteredLugares.removeWhere((lugar) => lugar.id == lugarId);
+    });
+  }
+
+  void toggleMarcado(String lugarId) async {
+    final lugar = lugaresCercanos.firstWhere((lugar) => lugar.id == lugarId);
+
+    String? userId = await getUserId();
+    if (userId != null) {
+      try {
+        if (lugar.marcado) {
+          // Eliminar el lugar de la lista de favoritos
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(userId)
+              .update({
+            'favoritos.$lugarId': FieldValue.delete(),
+          });
+
+          setState(() {
+            lugar.marcado = false;
+          });
+
+          // Eliminar el lugar de la lista filtrada si ya no está marcado
+          removeLugarFromList(lugarId);
+        }
+      } catch (e) {
+        print('Error al actualizar la lista de favoritos: $e');
+      }
+    } else {
+      print('No hay usuario loggeado');
+    }
+  }
+
+  void navigateToLugarDetalle(Lugar lugar) async {
+    final result = await Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => LugarDetalle(lugar: lugar),
       ),
     );
+
+    if (result != null && result is bool) {
+      // Actualizar la lista de lugares cercanos solo si el lugar fue desmarcado
+      if (!result) {
+        removeLugarFromList(lugar.id);
+      }
+    }
   }
 
   @override
@@ -50,11 +166,26 @@ class _MisFavoritosState extends State<MisFavoritos> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.amber[700],
-        title: const Text("Mis favoritos"),
+        title: TextField(
+          controller: _searchController,
+          style: const TextStyle(color: Colors.white),
+          onChanged: filterLugares,
+          decoration: const InputDecoration(
+            hintText: 'Buscar',
+            border: InputBorder.none,
+            hintStyle: TextStyle(color: Colors.white70),
+          ),
+        ),
         actions: [
+          IconButton(
+            onPressed: () {
+              filterLugares(_searchController.text);
+            },
+            icon: const Icon(Icons.search),
+          ),
           Builder(
             builder: (BuildContext context) {
-              // Utiliza Builder para crear un nuevo contexto que contiene el Scaffold
+              // Utiliza Builder para crear un nuevo contexto vinculado al Scaffold
               return IconButton(
                 icon: Image.asset(
                   'lib/icons/menu.png', // Reemplaza la ruta con la ubicación de tu imagen
@@ -73,28 +204,82 @@ class _MisFavoritosState extends State<MisFavoritos> {
         onSignOutPressed: () {
           AuthServices.signOut(context);
         },
+        vistaPrevia: '/favoritos',
       ),
-      body: ListView.builder(
-        itemCount: _favoritos.length,
-        itemBuilder: (BuildContext context, int index) {
-          final lugar = _favoritos[index];
-          return ListTile(
-            leading: const Icon(Icons.location_on),
-            title: Text(
-              lugar.nombre,
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            subtitle: Text(
-              lugar.historia,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-            ),
-            onTap: () {
-              _navigateToLugarDetalle(lugar);
-            },
-          );
-        },
+      body: Padding(
+        padding: const EdgeInsets.only(top: 30.0),
+        child: ListView.builder(
+          itemCount: filteredLugares.length,
+          itemBuilder: (BuildContext context, int index) {
+            final lugar = filteredLugares[index];
+            return ListTile(
+              leading: const Icon(Icons.location_on),
+              title: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    lugar.nombre,
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 5),
+                  Row(
+                    children: [
+                      RatingBarIndicator(
+                        rating: lugar.valoracion,
+                        itemBuilder: (context, _) => const Icon(
+                          Icons.star,
+                          color: Colors.amber,
+                        ),
+                        itemCount: 5,
+                        itemSize: 20,
+                        unratedColor: Colors.grey[300],
+                        direction: Axis.horizontal,
+                      ),
+                      const SizedBox(width: 5),
+                      Text(
+                        lugar.valoracion.toString(),
+                        style: const TextStyle(fontSize: 14),
+                      ),
+                      const SizedBox(width: 5),
+                      Text(
+                        '(${lugar.valoraciones.length})',
+                        style: const TextStyle(fontSize: 14),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 5),
+                  Text(
+                    lugar.historia.length > 125
+                        ? '${lugar.historia.substring(0, 125)}...'
+                        : lugar.historia,
+                    style: const TextStyle(fontSize: 14),
+                  ),
+                ],
+              ),
+              trailing: IconButton(
+                icon: Icon(
+                  lugar.marcado ? Icons.favorite : Icons.favorite_border,
+                  color: lugar.marcado ? Colors.red : null,
+                ),
+                onPressed: () {
+                  toggleMarcado(lugar.id);
+                },
+              ),
+              onTap: () {
+                navigateToLugarDetalle(
+                    lugar); // Navegar a la vista de detalles del lugar
+              },
+            );
+          },
+        ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
   }
 }
